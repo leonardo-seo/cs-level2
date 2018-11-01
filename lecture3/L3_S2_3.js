@@ -2,15 +2,13 @@
 
 class todoProgram {
 
-  // 변수 생성하기
-  constructor() {
+  constructor() { // 변수 생성하기
     this.taskList = [];
     this.id = 1;
     this.status = ['todo', 'doing', 'done'];
   }
 
-  // 한줄띄어쓰는 함수
-  newLine() {
+  newLine() { // 한줄띄어쓰는 함수
     console.log(``);
   }
   
@@ -21,7 +19,7 @@ class todoProgram {
   overTime(startTime) { // 끝나는 시간에서 시작하는 시간을 빼는 함수
     return new Date().getTime() - startTime;
   }
-  
+
   printStatus() { // 현재상태를 출력하는 함수
     this.doneCount = 0; 
     this.doingCount = 0;
@@ -35,13 +33,11 @@ class todoProgram {
     console.log(`현재상태 : todo:${this.todoCount}개,  doing:${this.doingCount}개, done:${this.doneCount}개`);
   }
 
-  // 변경사항을 출력하는 함수
-  printUpdate(id, name, situation) {
+  printUpdate(id, name, situation) { // 변경사항을 출력하는 함수
     console.log(`id: ${id},  "${name}" ${situation}`);
   };
 
-  // 새로운 항목을 추가하는 함수
-  add({ name, tag }) {
+  add({ name, tag }) { // 새로운 항목을 추가하는 함수
     this.taskList.push({
       name: name,
       tag: tag,
@@ -54,8 +50,7 @@ class todoProgram {
     this.newLine();
   }
 
-  // 현재상태를 갱신 하는 함수
-  update(nowStatus) {
+  update(nowStatus) { // 현재상태를 갱신 하는 함수
     let newStatus = nowStatus.nextstatus.toLowerCase();
     let oldStatus;
     let taskName;
@@ -88,16 +83,14 @@ class todoProgram {
     this.newLine();
   }
 
-  // 호출하는 할일들을 출력하는 함수
-  printTasks(status, taskCount, statusArr, overTime) {
+  printTasks(status, taskCount, statusArr, overTime) { // 호출하는 할일들을 출력하는 함수
     console.log(`[ ${status} , 총${taskCount}개 ]`);
     for (let i = 0; i < taskCount; i++) process.stdout.write(`- ${statusArr[i].id}번, ${statusArr[i].name}`);
     if(status === 'done') console.log(`, ${overTime} ms`);
     this.newLine();
   }
 
-  // 태그를 입력 받아 태그와 일치하는 할일을 모두 출력하는 함수
-  showTag(tag) {
+  showTag(tag) { // 태그를 입력 받아 태그와 일치하는 할일을 모두 출력하는 함수
     let sortTaskArr = [[], [], []]; // todo, doing, done
     let overTime;
 
@@ -120,8 +113,7 @@ class todoProgram {
     for (let i = 0; i < 3; i++) this.printTasks(this.status[i], sortTaskArr[i].length, sortTaskArr[i], overTime);
   }
 
-  // 태그가 있는 모든 할일을 tag기준으로 출력
-  showTags() {
+  showTags() { // 태그가 있는 모든 할일을 tag기준으로 출력
     let tagsArray = [];
     let sortTask = [];
     this.taskList.forEach(function(task) { // 태그를 종류별로 tagsArray에 추가
@@ -177,7 +169,7 @@ class todoProgram {
     return taskCount;
   }
   
-  showAll() { //  모든 리스트를 상태를 기준으로 지연출력.
+  showAll() { // 모든 리스트를 상태를 기준으로 지연출력.
     let i = 0;
     let delayTime = [ 2, 3, 2 ];
     let taskCount = this.taskCountFuc(this.status);
@@ -193,12 +185,6 @@ class todoProgram {
     this.printShowAll(this.status[i], this.taskList.length, delayTime[i]);
     setTimeout(()=>recursion(i), 1000 * delayTime[i]);
   }
-
-    // 현재 status가 done이면 시간 출력기능 추가 예정
-    // "지금부터 2초뒤에 done내역을 출력합니다....."
-    // [ done , 총2개 ]
-    // - 20번, 휴대폰수리, [other], 1시간1분
-    // - 21번, closure공부, [programming], 1일 23분
 }
 
 const todo = new todoProgram();
