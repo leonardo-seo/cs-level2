@@ -113,9 +113,9 @@ class todoProgram {
   }
 
   pushTasks(tagsArray, sortTask) { // 태그가 맞으면 sortTask의 맞는 인덱스에 push
-    this.taskList.forEach(function(task) { 
+    this.taskList.forEach(function (task) {
       let tagBool = tagsArray.indexOf(task.tag);
-      if(tagBool !== -1) { 
+      if (tagBool !== -1) {
         sortTask[tagBool].push(task);
       }
     });
@@ -126,11 +126,11 @@ class todoProgram {
     let sortTask = [];
     this.findTags(tagsArray, sortTask);
     this.pushTasks(tagsArray, sortTask);
-    for(let i = 0; i < tagsArray.length; i++) {
+    for (let i = 0; i < tagsArray.length; i++) {
       console.log(`[ ${tagsArray[i]} , 총${sortTask[i].length}개 ]`);
-      for(let j = 0; j < sortTask[i].length; j++) {
+      for (let j = 0; j < sortTask[i].length; j++) {
         process.stdout.write(`- ${sortTask[i][j].id}번, ${sortTask[i][j].name}, [${sortTask[i][j].status}]`);
-        if(sortTask[i][j].status === 'done') console.log(` ${sortTask[i][j].overTime} ms`);
+        if (sortTask[i][j].status === 'done') console.log(` ${sortTask[i][j].overTime} ms`);
         else console.log('');
       }
       this.newLine();
@@ -146,9 +146,9 @@ class todoProgram {
         process.stdout.write(`- ${task.id}번, ${task.name}, [${task.tag}]`);
         if (status === 'done') console.log(` ${task.overTime} ms`);
         else console.log('');
-        if (taskCount === undefined) console.log('');
       }
     }
+    this.newLine();
   }
 
   printShowAll(status, allTaskCount, delayTime) { // 지연할 시간과 총 리스트의 개수, status를 출력하는 함수 
@@ -169,12 +169,11 @@ class todoProgram {
   showAll() { //  모든 리스트를 상태를 기준으로 지연출력.
     let i = 0;
     let delayTime = [2, 3, 2];
-    let taskCount = this.taskCountFuc(this.status);
 
     let recursion = (i) => {
+      let taskCount = this.taskCountFuc(this.status[i]);
       if (i > 2) return;
       this.show(this.status[i], 'status', taskCount);
-      this.newLine();
       i++;
       if (this.status[i] !== undefined) this.printShowAll(this.status[i], this.taskList.length, delayTime[i]);
       setTimeout(() => recursion(i), 1000 * delayTime[i]);
@@ -188,5 +187,15 @@ const todo = new todoProgram();
 todo.add({ name: "자기", tag: "rest" });
 todo.add({ name: "자기", tag: "rest" });
 todo.add({ name: "자바스크립트공부", tag: "programming" });
+todo.update({ id: 2, nextstatus: "doing" });
+todo.add({ name: "ios공부", tag: "programming" });
+todo.add({ name: "자바공부", tag: "programming" });
+todo.add({ name: "안드로이드공부", tag: "programming" });
+todo.update({ id: 1, nextstatus: "doing" });
+todo.update({ id: 3, nextstatus: "doing" });
+todo.update({ id: 3, nextstatus: "doNe" });
 
+todo.show('todo');
+todo.show('doing');
+todo.show('done');
 todo.showAll();
