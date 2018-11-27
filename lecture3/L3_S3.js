@@ -252,6 +252,24 @@ class todoProgram {
     }
   }
 
+  undoError(undo) { // undo, redo를 3번 초과 실행 했을때 에러 메세지를 출력
+    switch (undo) {
+      case 'undo':
+        if (this.undoCount >= 4) {
+          console.log(`${undo}는 3번만 할 수 있습니다.`);
+          return true;
+        }
+        break;
+      case 'redo':
+        if (this.redoCount >= 4) {
+          console.log(`${undo}는 3번만 할 수 있습니다.`);
+          return true;
+        }
+        break;
+    }
+    return false;
+  }
+
   undoRun(list, count, undo) {
     const history = list[list.length - count];
     switch (history.method) {
@@ -268,10 +286,12 @@ class todoProgram {
   }
 
   undo() { // 실행했던 함수를 취소
+    if (this.undoError('undo')) return this.newLine();
     this.undoRun(this.historyList, this.undoCount, 'undo');
     this.undoCount++;
   }
   redo() { // 최소한 함수를 다시 실행
+    if (this.undoError('redo')) return this.newLine();
     this.undoRun(this.undoList, this.redoCount, 'redo');
     this.undoCount--;
     this.redoCount++;
@@ -294,6 +314,8 @@ todo.remove({ id: 1 });
 todo.undo();
 todo.undo();
 todo.undo();
+todo.undo();
+todo.redo();
 todo.redo();
 todo.redo();
 todo.redo();
