@@ -68,7 +68,7 @@ class todoProgram {
         return false;
       }
     }
-    this.printError('dontExistId', null ,newId);
+    this.printError('dontExistId', null, newId);
     return true;
   }
 
@@ -77,7 +77,7 @@ class todoProgram {
       const { id } = task;
       if (id === newId) return false;
     }
-    this.printError('dontExistId', null ,newId);
+    this.printError('dontExistId', null, newId);
     return true;
   }
 
@@ -98,6 +98,11 @@ class todoProgram {
     console.log(`id: ${id},  "${name}" ${situation}`);
   }
 
+  assortHistory(undo, history) {
+    if (undo === 'undo') this.pushHistory(history, 'undo');
+    if (undo === undefined) this.pushHistory(history, 'history');
+  }
+
   add({ name, tag, historyId, status }, undo) { // 새로운 항목을 추가
     if (this.addError(name)) return this.newLine();
     let newTask = {
@@ -114,19 +119,22 @@ class todoProgram {
     this.printUpdate(newTask.id, name, '항목이 새로 추가됐습니다.');
     this.printStatus();
     this.newLine();
-    if (undo === 'undo') this.pushHistory({ id: newTask.id, method: 'add' }, 'undo');
-    if (undo === undefined) this.pushHistory({ id: newTask.id, method: 'add' }, 'history');
+    this.assortHistory(undo, { id: newTask.id, method: 'add' });
     this.id++;
   }
 
-  update(newTask, undo) { // 현재상태를 갱신
+  check$(newTask) {
     if (typeof newTask === 'string') {
       newTask = newTask.split('$');
-      newTask = {
+      return {
         id: parseInt(newTask[0], 10),
         nextstatus: newTask[1]
       }
     }
+  }
+
+  update(newTask, undo) { // 현재상태를 갱신
+    newTask = this.check$(newTask);
     newTask.nextstatus = newTask.nextstatus.toLowerCase();
     let taskName;
     let oldTask = {
@@ -146,8 +154,7 @@ class todoProgram {
     this.printUpdate(newTask.id, taskName, `항목이 ${oldTask.status} => ${newTask.nextstatus} 상태로 업데이트 됐습니다.`);
     this.printStatus();
     this.newLine();
-    if (undo === 'undo') this.pushHistory({ id: oldTask.id, status: oldTask.status, method: 'update' }, 'undo');
-    if (undo === undefined) this.pushHistory({ id: oldTask.id, status: oldTask.status, method: 'update' }, 'history');
+    this.assortHistory(undo, { id: oldTask.id, status: oldTask.status, method: 'update' });
   }
 
   remove(existing, undo) { // 기존 항목을 삭제
@@ -162,8 +169,7 @@ class todoProgram {
     this.printUpdate(existingLecture.id, existingLecture.name, '삭제완료.');
     this.printStatus();
     this.newLine();
-    if (undo === 'undo') this.pushHistory({ name: existingLecture.name, tag: existingLecture.tag, id: existingLecture.id, status: existingLecture.status, method: 'remove' }, 'undo');
-    if (undo === undefined) this.pushHistory({ name: existingLecture.name, tag: existingLecture.tag, id: existingLecture.id, status: existingLecture.status, method: 'remove' }, 'history');
+    this.assortHistory(undo, { name: existingLecture.name, tag: existingLecture.tag, id: existingLecture.id, status: existingLecture.status, method: 'remove' });
   }
 
   printTasks(status, taskCount, statusArr, overTime) { // 호출하는 할일들을 출력
@@ -333,7 +339,7 @@ todo.update("1$done");
 todo.update('1$done');
 todo.update("1$doing");
 todo.update('9$doing');
-todo.remove({id:8})
+todo.remove({ id: 8 })
 // todo.update("2$ doing");
 // todo.update("38$ doNe ");
 // todo.update({ id: 1, nextstatus: "doNe" });
