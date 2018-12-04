@@ -131,6 +131,7 @@ class todoProgram {
         nextstatus: newTask[1]
       }
     }
+    return newTask;
   }
 
   update(newTask, undo) { // 현재상태를 갱신
@@ -340,21 +341,10 @@ todo.update('1$done');
 todo.update("1$doing");
 todo.update('9$doing');
 todo.remove({ id: 8 })
-// todo.update("2$ doing");
-// todo.update("38$ doNe ");
-// todo.update({ id: 1, nextstatus: "doNe" });
-// todo.undo();
-// todo.redo();
-// todo.remove({ id: 33 });
-// todo.remove({ id: 1 });
-// todo.undo();
-// todo.undo();
-// todo.undo();
-// todo.undo();
-// todo.redo();
-// todo.redo();
-// todo.redo();
-// todo.redo();
+todo.undo();
+todo.undo();
+todo.redo();
+todo.redo();
 
 todo.show('todo');
 todo.show('doing');
